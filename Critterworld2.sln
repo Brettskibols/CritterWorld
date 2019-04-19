@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemonstrationCritters", "De
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Documentation", "Documentation\Documentation.shproj", "{4E7AD907-0AD6-46A9-99F2-690AD28B259E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "100490372", "100490372\100490372.csproj", "{7FFBAA2D-BEF4-4B21-BD87-7C015A7D3F3D}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Documentation\Documentation.projitems*{4e7ad907-0ad6-46a9-99f2-690ad28b259e}*SharedItemsImports = 13
@@ -50,6 +52,10 @@ Global
 		{9BEABD20-1A39-4913-9765-D057124641E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9BEABD20-1A39-4913-9765-D057124641E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9BEABD20-1A39-4913-9765-D057124641E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FFBAA2D-BEF4-4B21-BD87-7C015A7D3F3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FFBAA2D-BEF4-4B21-BD87-7C015A7D3F3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FFBAA2D-BEF4-4B21-BD87-7C015A7D3F3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FFBAA2D-BEF4-4B21-BD87-7C015A7D3F3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
