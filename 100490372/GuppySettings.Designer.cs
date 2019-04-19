@@ -122,7 +122,7 @@
             this.trackBarHeadForExitSpeed.Value = 5;
             this.trackBarHeadForExitSpeed.Scroll += new System.EventHandler(this.TrackBarHeadForExitSpeed_Scroll);
             // 
-            // ChaserSettings
+            // GuppySettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

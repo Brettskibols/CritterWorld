@@ -50,6 +50,20 @@
     <Compile Include="BoogleSettings.Designer.cs">
       <DependentUpon>BoogleSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Aramis.cs" />
+    <Compile Include="AramisSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AramisSettings.Designer.cs">
+      <DependentUpon>AramisSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dartagnan.cs" />
+    <Compile Include="DartagnanSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DartagnanSettings.Designer.cs">
+      <DependentUpon>DartagnanSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Guppy.cs" />
     <Compile Include="GuppySettings.cs">
       <SubType>Form</SubType>
@@ -70,6 +84,12 @@
   <ItemGroup>
     <EmbeddedResource Include="BoogleSettings.resx">
       <DependentUpon>BoogleSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AramisSettings.resx">
+      <DependentUpon>AramisSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DartagnanSettings.resx">
+      <DependentUpon>DartagnanSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GuppySettings.resx">
       <DependentUpon>GuppySettings.cs</DependentUpon>

@@ -10,13 +10,13 @@ using System.Windows.Forms;
 
 namespace _100490372
 {
-    public partial class PorthosSettings : Form
+    public partial class AramisSettings : Form
     {
-        Porthos critter;
+        Aramis critter;
 
-        public PorthosSettings(Porthos porthos)
+        public AramisSettings(Aramis aramis)
         {
-            critter = porthos;
+            critter = aramis;
 
             InitializeComponent();
 
@@ -48,11 +48,6 @@ namespace _100490372
         private void BtnCancel_Click(object sender, EventArgs e)
         {
             Dispose();
-        }
-
-        private void PorthosSettings_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

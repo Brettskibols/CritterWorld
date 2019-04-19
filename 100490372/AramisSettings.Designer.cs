@@ -1,6 +1,6 @@
 ﻿namespace _100490372
 {
-    partial class PorthosSettings
+    partial class AramisSettings
     {
         /// <summary>
         /// Required designer variable.
@@ -122,7 +122,7 @@
             this.trackBarHeadForExitSpeed.Value = 5;
             this.trackBarHeadForExitSpeed.Scroll += new System.EventHandler(this.TrackBarHeadForExitSpeed_Scroll);
             // 
-            // PorthosSettings
+            // Aramis Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -135,9 +135,8 @@
             this.Controls.Add(this.trackBarNominalFeedingSpeed);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOk);
-            this.Name = "PorthosSettings";
-            this.Text = "Porthos Settings";
-            this.Load += new System.EventHandler(this.PorthosSettings_Load);
+            this.Name = "AramisSettings";
+            this.Text = "Aramis Settings";
             ((System.ComponentModel.ISupportInitialize)(this.trackBarNominalFeedingSpeed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarHeadForExitSpeed)).EndInit();
             this.ResumeLayout(false);

@@ -19,6 +19,8 @@ namespace _100490372
                 controllers.Add(new Porthos("Porthos" + (i + 1)));
                 controllers.Add(new Boogle("Boogle" + (i + 1)));
                 controllers.Add(new Guppy("Guppy" + (i + 1)));
+                controllers.Add(new Aramis("Aramis" + (i + 1)));
+                controllers.Add(new Dartagnan("Dartagnan" + (i + 1)));
             }
             return controllers.ToArray();
         }
