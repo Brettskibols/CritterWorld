@@ -132,6 +132,7 @@ namespace _100490372
                     getInfoTimer.Start();
                     break;
                 case "SHUTDOWN":
+                    SaveSettings();
                     getInfoTimer.Stop();
                     break;
                 case "SCAN":
