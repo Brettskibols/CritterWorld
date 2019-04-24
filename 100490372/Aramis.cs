@@ -54,7 +54,6 @@ namespace _100490372
         {
             Responder("GET_LEVEL_TIME_REMAINING:1");
         }
-
         private void LoadSettings()
         {
             string fileName = "Aramis.cfg";
@@ -84,7 +83,6 @@ namespace _100490372
                 Log("Reading configuration " + fileSpec + " failed due to " + e);
             }
         }
-
         public void SaveSettings()
         {
             string fileName = "Aramis.cfg";
@@ -113,7 +111,6 @@ namespace _100490372
             settings.Show();
             settings.Focus();
         }
-
         public void Receive(string message)
         {
             Log("Message from body for " + Name + ": " + message);
@@ -160,7 +157,6 @@ namespace _100490372
                     break;
             }
         }
-
         private void See(string message)
         {
             string[] newlinePartition = message.Split('\n');
@@ -185,14 +181,17 @@ namespace _100490372
                             Log("Food is at " + location);
                             SetDestination(location, EatSpeed);
                             break;
+
                         case "Gift":
                             Log("Gift is at " + location);
                             SetDestination(location, EatSpeed);
                             break;
+
                         case "Bomb":
                             Log("Bomb is at " + location);
                             Responder("RANDOM_DESTINATION");
                             break;
+
                         case "EscapeHatch":
                             if (headingForGoal)
                             {
@@ -200,9 +199,14 @@ namespace _100490372
                             }
                             Log("EscapeHatch is at " + location);
                             break;
+
                         case "Terrain":
                             Log("Terrain is at " + location);
+                            Responder ("SetDestination:100:100:5");
+                            
+                            //Responder("STOP");
                             break;
+
                         case "Critter":
                             int critterNumber = int.Parse(thingAttributes[2]);
                             string nameAndAuthor = thingAttributes[3];
@@ -218,7 +222,6 @@ namespace _100490372
                 }
             }
         }
-
         private void Scan(string message)
         {
             string[] newlinePartition = message.Split('\n');
@@ -232,11 +235,10 @@ namespace _100490372
                     case "EscapeHatch":
                         Log("Escape hatch is at " + location);
                         goal = location;
-                        SetDestination(location, 5);
+                        SetDestination(location, 10);
                         break;
                 }
             }
         }
-
     }
 }
