@@ -45,15 +45,19 @@ namespace _100490372
             }
         }
 
+        //Sets Destination at given co-ords
         private void SetDestination(Point coordinate, int speed)
         {
             Responder("SET_DESTINATION:" + coordinate.X + ":" + coordinate.Y + ":" + speed);
         }
 
+        //Gets level time remaining
         private void Tick()
         {
             Responder("GET_LEVEL_TIME_REMAINING:1");
         }
+
+        //loads settings from cfg configured at runtime
         private void LoadSettings()
         {
             string fileName = "Aramis.cfg";
@@ -83,6 +87,8 @@ namespace _100490372
                 Log("Reading configuration " + fileSpec + " failed due to " + e);
             }
         }
+
+        //Saves settings after changed at runtime for futire rounds
         public void SaveSettings()
         {
             string fileName = "Aramis.cfg";
@@ -105,12 +111,15 @@ namespace _100490372
             Name = name;
         }
 
+        //Launches UI for current Critter contained in settings.cs files
         public void LaunchUI()
         {
             AramisSettings settings = new AramisSettings(this);
             settings.Show();
             settings.Focus();
         }
+
+        //Messages sent by the enviroment to the critter
         public void Receive(string message)
         {
             Log("Message from body for " + Name + ": " + message);
@@ -154,9 +163,13 @@ namespace _100490372
                     break;
                 case "ERROR":
                     Log(message);
+                    System.IO.File.WriteAllText(@"‪C:\Users\Brett\Desktop\Error.txt", message);
                     break;
-            }
+                    }
         }
+
+        /*The Critters actual vision and realtime feedback based on info
+         Very short range*/
         private void See(string message)
         {
             string[] newlinePartition = message.Split('\n');
@@ -166,13 +179,15 @@ namespace _100490372
                 string[] thingAttributes = thing.Split(':');
                 if (thingAttributes[0] == "Nothing")
                 {
-                    Log("I see nothing. Maybe aim for the escape hatch.");
-                    if (headingForGoal && goal != new Point(-1, -1))
-                    {
-                        SetDestination(goal, HeadForExitSpeed);
-                    }
+                        Log("I see nothing. Maybe aim for the escape hatch.");
+                        if (headingForGoal && goal != new Point(-1, -1))
+                        {
+                            SetDestination(goal, HeadForExitSpeed);
+                        }
                 }
                 else
+                /*Responder("SCAN:2"); //- Caused the critter to immediately run to the exit upon start up, regardsless of bombs and terrian
+                */
                 {
                     Point location = PointFrom(thingAttributes[1]);
                     switch (thingAttributes[0])
@@ -184,7 +199,7 @@ namespace _100490372
 
                         case "Gift":
                             Log("Gift is at " + location);
-                            SetDestination(location, EatSpeed);
+                            SetDestination(location, 10);
                             break;
 
                         case "Bomb":
@@ -202,8 +217,8 @@ namespace _100490372
 
                         case "Terrain":
                             Log("Terrain is at " + location);
-                            Responder ("SetDestination:100:100:5");
-                            
+                            Responder("RANDOM_DESTINATION");
+
                             //Responder("STOP");
                             break;
 
@@ -217,11 +232,18 @@ namespace _100490372
                             {
                                 SetDestination(location, 10);
                             }
+                            else if (strength == "Adequate" && !isDead)
+                            {
+                                SetDestination(location, 10);
+                            }
                             break;
+
                     }
                 }
             }
         }
+
+        //Scan method, makes critter scan enviroment short and long range
         private void Scan(string message)
         {
             string[] newlinePartition = message.Split('\n');
