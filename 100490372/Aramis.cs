@@ -154,7 +154,7 @@ namespace _100490372
                     break;
                 case "LEVEL_TIME_REMAINING":
                     int secondsRemaining = int.Parse(msgParts[2]);
-                    if (secondsRemaining < 30)
+                    if (secondsRemaining < 60)
                     {
                         Log("Now heading for goal.");
                         headingForGoal = true;
@@ -179,15 +179,16 @@ namespace _100490372
                 string[] thingAttributes = thing.Split(':');
                 if (thingAttributes[0] == "Nothing")
                 {
-                        Log("I see nothing. Maybe aim for the escape hatch.");
-                        if (headingForGoal && goal != new Point(-1, -1))
-                        {
-                            SetDestination(goal, HeadForExitSpeed);
-                        }
+                    Responder("SCAN:2");
+                     Log("I see nothing. Maybe aim for the escape hatch.");
+                     if (headingForGoal && goal != new Point(-1, -1))
+                     {
+                         SetDestination(goal, HeadForExitSpeed);
+                     }
                 }
                 else
-                /*Responder("SCAN:2"); //- Caused the critter to immediately run to the exit upon start up, regardsless of bombs and terrian
-                */
+                //Responder("SCAN:2"); //- Caused the critter to immediately run to the exit upon start up, regardsless of bombs and terrian
+                
                 {
                     Point location = PointFrom(thingAttributes[1]);
                     switch (thingAttributes[0])
