@@ -19,9 +19,11 @@ namespace _100490372
 
         public string Filepath { get; set; }
 
-        public int EatSpeed { get; set; } = 5;
+        public int EatSpeed { get; set; } = 10;
 
         public int HeadForExitSpeed { get; set; } = 5;
+
+        public int ScoreCheck { get; set; } = 0;
 
         private static Point PointFrom(string coordinate)
         {
@@ -88,7 +90,7 @@ namespace _100490372
             }
         }
 
-        //Saves settings after changed at runtime for futire rounds
+        //Saves settings after changed at runtime for future rounds
         public void SaveSettings()
         {
             string fileName = "Aramis.cfg";
@@ -162,6 +164,8 @@ namespace _100490372
                         SetDestination(goal, HeadForExitSpeed);
                     }
                     break;
+                case "SCORED":
+
                 case "ERROR":
                     Log(message);
                     System.IO.File.WriteAllText(@"‪C:\Users\Brett\Desktop\Error.txt", message);
@@ -222,7 +226,7 @@ namespace _100490372
                             Log("Terrain is at " + location);
                             Responder("RANDOM_DESTINATION");
 
-                            //Responder("STOP");
+                            //Responder("STOP"); - Placeholder for testing terrain modifiers, might be able to inherit from SCG.TurboSprite
                             break;
 
                         case "Critter":
@@ -240,7 +244,7 @@ namespace _100490372
                                 SetDestination(location, 5);
                             }
                             break;
-
+                            //problem in the fact that contact with critters changing critters direction affects pathfinding badly, remove? or limit?
                     }
                 }
             }
@@ -260,8 +264,8 @@ namespace _100490372
                     case "EscapeHatch":
                         Log("Escape hatch is at " + location);
                         goal = location;
-                        Responder("RANDOM_DESTINATION");
-                        //SetDestination(location, 10);
+                        //Responder("RANDOM_DESTINATION");
+                        //SetDestination(location, 10);      - Stops the critter heading to the goal everytime it scans, would devastate pathfinding algorythems
                         break;
                 }
             }
