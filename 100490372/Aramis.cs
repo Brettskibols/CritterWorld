@@ -25,6 +25,10 @@ namespace _100490372
 
         public int ScoreCheck { get; set; } = 0;
 
+        bool isHungryBoy = false;
+
+        public string HealthCheck { get; set; } = "";
+
         private static Point PointFrom(string coordinate)
         {
             string[] coordinateParts = coordinate.Substring(1, coordinate.Length - 2).Split(',');
@@ -171,6 +175,15 @@ namespace _100490372
                     Log(message);
                     System.IO.File.WriteAllText(@"‪C:\Users\Brett\Desktop\Error.txt", message);
                     break;
+                case "GET_HEALTH":
+                    int healthScore = int.Parse(msgParts[1]);  //Splits received healthscore into value, rather than request/value/string (strong weak etc)
+                    if (healthScore < 50)
+                    {
+                        isHungryBoy = true;  //toggles if critter is hungry, if its true toggles permission to set destination to food later in code.
+                    }
+                    else
+                        isHungryBoy = false;
+                    break;
             }
         }
 
@@ -202,7 +215,12 @@ namespace _100490372
                     {
                         case "Food":
                             Log("Food is at " + location);
-                            SetDestination(location, EatSpeed);
+                            
+                            
+                            if (isHungryBoy == true)    //Critter should only knowingly go after food when hungry and bool set to true by healthscore parameter. 
+                            {
+                                SetDestination(location, EatSpeed);
+                            }
                             break;
 
                         case "Gift":
