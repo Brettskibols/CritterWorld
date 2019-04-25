@@ -23,6 +23,12 @@ namespace _100490372
 
         public int HeadForExitSpeed { get; set; } = 5;
 
+        public int ScoreCheck { get; set; } = 0;
+
+        bool isHungryBoy = false;
+
+        public string HealthCheck { get; set; } = "";
+
         private static Point PointFrom(string coordinate)
         {
             string[] coordinateParts = coordinate.Substring(1, coordinate.Length - 2).Split(',');
@@ -45,16 +51,19 @@ namespace _100490372
             }
         }
 
+        //Sets Destination for critter method
         private void SetDestination(Point coordinate, int speed)
         {
             Responder("SET_DESTINATION:" + coordinate.X + ":" + coordinate.Y + ":" + speed);
         }
 
+        //level time remaining method for counting tick of time
         private void Tick()
         {
             Responder("GET_LEVEL_TIME_REMAINING:1");
         }
 
+        //loads settings from config at runtime
         private void LoadSettings()
         {
             string fileName = "Porthos.cfg";
@@ -85,6 +94,7 @@ namespace _100490372
             }
         }
 
+        //Saves settings after changed at runtime for future rounds
         public void SaveSettings()
         {
             string fileName = "Porthos.cfg";
@@ -107,6 +117,7 @@ namespace _100490372
             Name = name;
         }
 
+        //Launches UI from cog icon in game UI
         public void LaunchUI()
         {
             PorthosSettings settings = new PorthosSettings(this);
@@ -114,6 +125,7 @@ namespace _100490372
             settings.Focus();
         }
 
+        //Messages sent by the enviroment to the critter ((MESSAGES RECEIVED FROM THE CRITTERWORLD ENVIROMENT IN READING PAGE 8
         public void Receive(string message)
         {
             Log("Message from body for " + Name + ": " + message);
@@ -147,19 +159,33 @@ namespace _100490372
                     break;
                 case "LEVEL_TIME_REMAINING":
                     int secondsRemaining = int.Parse(msgParts[2]);
-                    if (secondsRemaining < 30)
+                    if (secondsRemaining < 30 && ScoreCheck >= 60) //Porthos will be the greediest of the muskeeters . . . critters
                     {
                         Log("Now heading for goal.");
-                        headingForGoal = true;
+                        headingForGoal = true;                     //Porthos will only head for goal after 30 secs remaining and 60 points scored or more.
                         SetDestination(goal, HeadForExitSpeed);
                     }
+                    break;
+                case "SCORED":
+                    ScoreCheck++;  //Updates public int ScoreCheck with the actual score so we can use it to base behavior off of, actions after 5 points etc!!!
                     break;
                 case "ERROR":
                     Log(message);
                     break;
+                case "GET_ENERGY":
+                    int energyScore = int.Parse(msgParts[2]);  //Splits received healthscore into value, rather than request/value/string (strong weak etc)
+                    if (energyScore < 99)     //Porthos is a chuckey critter and will therefore constantly feed when able
+                    {
+                        isHungryBoy = true;  //toggles if critter is hungry, if its true toggles permission to set destination to food later in code.
+                    }
+                    else
+                        isHungryBoy = false;
+                    break;
             }
         }
 
+
+        //Critters actual view range - VERY SHORT RANGE
         private void See(string message)
         {
             string[] newlinePartition = message.Split('\n');
@@ -182,11 +208,12 @@ namespace _100490372
                     {
                         case "Food":
                             Log("Food is at " + location);
-                            SetDestination(location, EatSpeed);
+                            if (isHungryBoy == true)    //Critter should only knowingly go after food when hungry and bool set to true by healthscore parameter. 
+                                SetDestination(location, 10);  //Porthos will persue food at fastest speed available in enviroment. 
                             break;
                         case "Gift":
                             Log("Gift is at " + location);
-                            SetDestination(location, EatSpeed);
+                            SetDestination(location, 10); //Porthos is extremely greedy for gifts and will race to collect them at any oppertunity
                             break;
                         case "Bomb":
                             Log("Bomb is at " + location);
@@ -201,6 +228,7 @@ namespace _100490372
                             break;
                         case "Terrain":
                             Log("Terrain is at " + location);
+                            Responder("RANDOM_DESTINATION");
                             break;
                         case "Critter":
                             int critterNumber = int.Parse(thingAttributes[2]);
@@ -212,12 +240,28 @@ namespace _100490372
                             {
                                 SetDestination(location, 10);
                             }
+                            else if (strength == "Adequate" && !isDead)
+                            {
+                                SetDestination(location, 10);
+                            }
+                            
+                            else if (strength == "Ok" && !isDead)
+                            {
+                                SetDestination(location, 10);
+                            }
+                            
+                            else if (strength == "Strong" && !isDead)    //Porthos is the strongest critter with the most energy and will therefore fight everyone.
+                            {
+                                SetDestination(location, 10);
+                            }
                             break;
+                            //problem in the fact that contact with critters changing critters direction affects pathfinding badly, remove? or limit?
                     }
                 }
             }
         }
 
+        //Scan method, makes critter scan enviroment short and long range
         private void Scan(string message)
         {
             string[] newlinePartition = message.Split('\n');
