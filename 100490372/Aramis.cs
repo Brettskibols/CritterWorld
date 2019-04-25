@@ -125,7 +125,7 @@ namespace _100490372
             settings.Focus();
         }
 
-        //Messages sent by the enviroment to the critter
+        //Messages sent by the enviroment to the critter ((MESSAGES RECEIVED FROM THE CRITTERWORLD ENVIROMENT IN READING PAGE 8 OF HOW TO WRITE CRITTER CONTROLLER))
         public void Receive(string message)
         {
             Log("Message from body for " + Name + ": " + message);
@@ -164,7 +164,7 @@ namespace _100490372
                     if (secondsRemaining < 30 && ScoreCheck >= 50)
                     {
                         Log("Now heading for goal.");
-                        headingForGoal = true;
+                        headingForGoal = true;                   // - Will now only toggle head for exit when less than 30 seconds to go and score is over 50pts!!!
                         SetDestination(goal, HeadForExitSpeed);
                     }
                     break;
@@ -175,9 +175,9 @@ namespace _100490372
                     Log(message);
                     System.IO.File.WriteAllText(@"‪C:\Users\Brett\Desktop\Error.txt", message);
                     break;
-                case "GET_HEALTH":
-                    int healthScore = int.Parse(msgParts[1]);  //Splits received healthscore into value, rather than request/value/string (strong weak etc)
-                    if (healthScore < 50)
+                case "GET_ENERGY":
+                    int energyScore = int.Parse(msgParts[2]);  //Splits received healthscore into value, rather than request/value/string (strong weak etc)
+                    if (energyScore < 50)
                     {
                         isHungryBoy = true;  //toggles if critter is hungry, if its true toggles permission to set destination to food later in code.
                     }
