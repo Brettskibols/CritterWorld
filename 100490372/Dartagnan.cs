@@ -23,6 +23,12 @@ namespace _100490372
 
         public int HeadForExitSpeed { get; set; } = 5;
 
+        public int ScoreCheck { get; set; } = 0;
+
+        bool isHungryBoy = false;
+
+        public string HealthCheck { get; set; } = "";
+
         private static Point PointFrom(string coordinate)
         {
             string[] coordinateParts = coordinate.Substring(1, coordinate.Length - 2).Split(',');
@@ -45,16 +51,19 @@ namespace _100490372
             }
         }
 
+        //Setting destination method
         private void SetDestination(Point coordinate, int speed)
         {
             Responder("SET_DESTINATION:" + coordinate.X + ":" + coordinate.Y + ":" + speed);
         }
 
+        //Level time remaining based on tick
         private void Tick()
         {
             Responder("GET_LEVEL_TIME_REMAINING:1");
         }
 
+        //loads settings from cfg configured at runtime
         private void LoadSettings()
         {
             string fileName = "Dartagnan.cfg";
@@ -85,6 +94,7 @@ namespace _100490372
             }
         }
 
+        //Saves settings after changed at runtime, checked and working
         public void SaveSettings()
         {
             string fileName = "Dartagnan.cfg";
@@ -107,6 +117,7 @@ namespace _100490372
             Name = name;
         }
 
+        //Launching UI from 'cog' menu 
         public void LaunchUI()
         {
             DartagnanSettings settings = new DartagnanSettings(this);
@@ -114,6 +125,7 @@ namespace _100490372
             settings.Focus();
         }
 
+        //Messages sent by the enviroment to the critter ((MESSAGES RECEIVED FROM THE CRITTERWORLD ENVIROMENT IN READING PAGE 8
         public void Receive(string message)
         {
             Log("Message from body for " + Name + ": " + message);
@@ -147,19 +159,33 @@ namespace _100490372
                     break;
                 case "LEVEL_TIME_REMAINING":
                     int secondsRemaining = int.Parse(msgParts[2]);
-                    if (secondsRemaining < 30)
+
+                    if (secondsRemaining < 30 && ScoreCheck >= 10) //Dart cares much less for score before exiting
                     {
                         Log("Now heading for goal.");
-                        headingForGoal = true;
+                        headingForGoal = true;                     //Will now only head for goal when 30secs left and over or equal ro 10 points
                         SetDestination(goal, HeadForExitSpeed);
                     }
+                    break;
+                case "SCORED":
+                    ScoreCheck++;  //Updates public int ScoreCheck with the actual score so we can use it to base behavior off of, actions after 5 points etc!!!
                     break;
                 case "ERROR":
                     Log(message);
                     break;
+                case "GET_ENERGY":
+                    int energyScore = int.Parse(msgParts[2]);  //Splits received healthscore into value, rather than request/value/string (strong weak etc)
+                    if (energyScore < 20)                     // DART will get far hungrier than the other 2 critters before eating freeing up the food for them.
+                    {
+                        isHungryBoy = true;  //toggles if critter is hungry, if its true toggles permission to set destination to food later in code.
+                    }
+                    else
+                        isHungryBoy = false;
+                    break;
             }
         }
 
+        //Short range critter vision
         private void See(string message)
         {
             string[] newlinePartition = message.Split('\n');
@@ -182,11 +208,12 @@ namespace _100490372
                     {
                         case "Food":
                             Log("Food is at " + location);
+                            if (isHungryBoy == true)    //Critter should only knowingly go after food when hungry and bool set to true by healthscore parameter. 
                             SetDestination(location, EatSpeed);
                             break;
                         case "Gift":
                             Log("Gift is at " + location);
-                            SetDestination(location, EatSpeed);
+                            SetDestination(location, EatSpeed);  //Dart is far less bothered about gifts than Aramis so prefers user input on eatspeed
                             break;
                         case "Bomb":
                             Log("Bomb is at " + location);
@@ -201,6 +228,7 @@ namespace _100490372
                             break;
                         case "Terrain":
                             Log("Terrain is at " + location);
+                            Responder("RANDOM_DESTINATION");
                             break;
                         case "Critter":
                             int critterNumber = int.Parse(thingAttributes[2]);
@@ -212,12 +240,18 @@ namespace _100490372
                             {
                                 SetDestination(location, 10);
                             }
+                            else if (strength == "Adequate" && !isDead)
+                            {
+                                SetDestination(location, 1); //Dart will fight a moderatly healthy opponent critter but will follow slowly as to rarely fight them.
+                            }
                             break;
+                            //problem in the fact that contact with critters changing critters direction affects pathfinding badly, remove? or limit?
                     }
                 }
             }
         }
 
+        //Scan method, makes critter scan enviroment short and long range
         private void Scan(string message)
         {
             string[] newlinePartition = message.Split('\n');
