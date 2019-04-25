@@ -133,7 +133,7 @@ namespace _100490372
                     Responder("STOP");
                     Responder("SCAN:1");
                     getInfoTimer = new System.Timers.Timer();
-                    getInfoTimer.Interval = 2000;
+                    getInfoTimer.Interval = 2000; 
                     getInfoTimer.Elapsed += (obj, evt) => Tick();
                     getInfoTimer.Start();
                     break;
@@ -154,7 +154,8 @@ namespace _100490372
                     break;
                 case "LEVEL_TIME_REMAINING":
                     int secondsRemaining = int.Parse(msgParts[2]);
-                    if (secondsRemaining < 60)
+                    
+                    if (secondsRemaining < 30)
                     {
                         Log("Now heading for goal.");
                         headingForGoal = true;
@@ -165,7 +166,7 @@ namespace _100490372
                     Log(message);
                     System.IO.File.WriteAllText(@"‪C:\Users\Brett\Desktop\Error.txt", message);
                     break;
-                    }
+            }
         }
 
         /*The Critters actual vision and realtime feedback based on info
@@ -179,9 +180,10 @@ namespace _100490372
                 string[] thingAttributes = thing.Split(':');
                 if (thingAttributes[0] == "Nothing")
                 {
-                    Responder("SCAN:2");
                      Log("I see nothing. Maybe aim for the escape hatch.");
-                     if (headingForGoal && goal != new Point(-1, -1))
+                     if (headingForGoal && goal!= new Point(-1, -1)) /*Might be able to inherit from CritterScorePanel 
+                                                                      partial class to compare scores to actions */
+                                                                                
                      {
                          SetDestination(goal, HeadForExitSpeed);
                      }
@@ -235,7 +237,7 @@ namespace _100490372
                             }
                             else if (strength == "Adequate" && !isDead)
                             {
-                                SetDestination(location, 10);
+                                SetDestination(location, 5);
                             }
                             break;
 
@@ -258,7 +260,8 @@ namespace _100490372
                     case "EscapeHatch":
                         Log("Escape hatch is at " + location);
                         goal = location;
-                        SetDestination(location, 10);
+                        Responder("RANDOM_DESTINATION");
+                        //SetDestination(location, 10);
                         break;
                 }
             }
