@@ -157,7 +157,7 @@ namespace _100490372
                 case "LEVEL_TIME_REMAINING":
                     int secondsRemaining = int.Parse(msgParts[2]);
                     
-                    if (secondsRemaining < 30)
+                    if (secondsRemaining < 30 && ScoreCheck >= 50)
                     {
                         Log("Now heading for goal.");
                         headingForGoal = true;
@@ -165,7 +165,8 @@ namespace _100490372
                     }
                     break;
                 case "SCORED":
-
+                    ScoreCheck++;  //Updates public int ScoreCheck with the actual score so we can use it to base behavior off of, actions after 5 points etc!!!
+                    break;
                 case "ERROR":
                     Log(message);
                     System.IO.File.WriteAllText(@"‪C:\Users\Brett\Desktop\Error.txt", message);
