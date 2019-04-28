@@ -25,7 +25,7 @@ namespace _100490372
 
         public int ScoreCheck { get; set; } = 0;
 
-        bool isHungryBoy = false;
+        public bool isHungryBoy = false;
 
         public string HealthCheck { get; set; } = "";
 
@@ -236,23 +236,22 @@ namespace _100490372
                             string strength = thingAttributes[4];
                             bool isDead = thingAttributes[5] == "Dead";
                             Log("Critter at " + location + " is #" + critterNumber + " who is " + nameAndAuthor + " with strength " + strength + " is " + (isDead ? "dead" : "alive"));
-                            if (strength == "Weak" && !isDead)
+                            if (nameAndAuthor != "Aramis by Brett Jones 100490372" || nameAndAuthor != "Dartagnan by Brett Jones 100490372"
+                                || nameAndAuthor != "Porthos by Brett Jones 100490372")
                             {
-                                SetDestination(location, 10);
-                            }
-                            else if (strength == "Adequate" && !isDead)
-                            {
-                                SetDestination(location, 10);
-                            }
-                            
-                            else if (strength == "Ok" && !isDead)
-                            {
-                                SetDestination(location, 10);
-                            }
-                            
-                            else if (strength == "Strong" && !isDead)    //Porthos is the strongest critter with the most energy and will therefore fight everyone.
-                            {
-                                SetDestination(location, 10);
+                                if (strength == "Weak" && !isDead)
+                                {
+                                    SetDestination(location, 10);
+                                }
+                                else if (strength == "Adequate" && !isDead)
+                                {
+                                    SetDestination(location, 10);
+                                }
+
+                                else if (strength == "Ok" && !isDead)  //Porthos is the strongest critter with the most energy and will therefore fight everyone.
+                                {                                      //But not someone with nearly max health
+                                    SetDestination(location, 10);
+                                }
                             }
                             break;
                             //problem in the fact that contact with critters changing critters direction affects pathfinding badly, remove? or limit?
